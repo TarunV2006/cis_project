@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Future App Hub</title>
+
+<style>
+body {
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+    color: #00f7ff;
+    text-align: center;
+    margin: 0;
+}
+
+h1, h2 {
+    text-shadow: 0 0 10px #00f7ff;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin: 5px;
+}
+
+button {
+    padding: 10px;
+    border-radius: 8px;
+    background: #00f7ff;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #00f7ff;
+    backdrop-filter: blur(10px);
+    width: 180px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #00f7ff;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px #00f7ff;
+}
+
+.card img {
+    width: 70px;
+}
+
+.delete-btn {
+    background: red;
+    margin-top: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🚀 FUTURE APP HUB</h1>
+
+<input type="text" id="appName" placeholder="Add app">
+<button onclick="addApp()">Add</button>
+
+<input type="text" id="search" placeholder="Search..." onkeyup="searchApps()">
+
+<h3 id="count"></h3>
+
+<!-- ⭐ FEATURED -->
+<div class="section">
+<h2>⭐ Featured Apps</h2>
+<div class="grid" id="featured"></div>
+</div>
+
+<!-- ➕ USER -->
+<div class="section">
+<h2>➕ Your Apps</h2>
+<div class="grid" id="user"></div>
+</div>
+
+<script>
+
+// ⭐ FEATURED APPS (15)
+const featuredApps = [
+    "instagram","youtube","netflix","amazon","swiggy","zomato",
+    "spotify","twitter","linkedin","facebook","whatsapp",
+    "gmail","google","aws","github"
+];
+
+// 🧠 CREATE CARD (AUTO LOGO + LINK)
+function createCard(name, container) {
+
+    const domain = name.replace(/\s+/g, '') + ".com";
+
+    const img = "https://logo.clearbit.com/" + domain;
+    const link = "https://" + domain;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <a href="${link}" target="_blank">
+            <img src="${img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/565/565547.png'">
+            <h3>${name}</h3>
+        </a>
+        ${container === "user" ? `<button class="delete-btn" onclick="deleteCard(this)">Delete</button>` : ""}
+    `;
+
+    document.getElementById(container).appendChild(card);
+}
+
+// ➕ ADD APP
+function addApp() {
+    const name = document.getElementById("appName").value.toLowerCase();
+    if (!name) return;
+
+    createCard(name, "user");
+    updateCount();
+
+    document.getElementById("appName").value = "";
+}
+
+// ❌ DELETE
+function deleteCard(btn) {
+    btn.parentElement.remove();
+    updateCount();
+}
+
+// 🔍 SEARCH
+function searchApps() {
+    const value = document.getElementById("search").value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(value) ? "block" : "none";
+    });
+}
+
+// 📊 COUNT
+function updateCount() {
+    document.getElementById("count").innerText =
+        "Total Apps: " + document.querySelectorAll(".card").length;
+}
+
+// 🔄 LOAD FEATURED
+window.onload = function() {
+    featuredApps.forEach(app => createCard(app, "featured"));
+    updateCount();
+};
+
+</script>
+
+</body>
+</html>
