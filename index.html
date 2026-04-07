@@ -3,71 +3,85 @@
 <head>
 <title>Future App Hub</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
 <style>
 body {
-    font-family: 'Orbitron', sans-serif;
-    background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
-    color: #00f7ff;
-    text-align: center;
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #000);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    color: white;
+    text-align: center;
 }
 
-h1, h2 {
-    text-shadow: 0 0 10px #00f7ff;
+@keyframes gradientBG {
+    0% { background-position: 0% }
+    50% { background-position: 100% }
+    100% { background-position: 0% }
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 40px;
+    text-shadow: 0 0 20px #00f7ff;
 }
 
 input {
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
     margin: 5px;
+    width: 200px;
 }
 
 button {
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     background: #00f7ff;
     color: black;
     border: none;
     cursor: pointer;
-}
-
-.section {
-    margin-top: 20px;
+    box-shadow: 0 0 10px #00f7ff;
 }
 
 .grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 25px;
     padding: 20px;
 }
 
 .card {
     background: rgba(255,255,255,0.05);
-    border: 1px solid #00f7ff;
-    backdrop-filter: blur(10px);
-    width: 180px;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px #00f7ff;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,247,255,0.3);
+    width: 190px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,247,255,0.3);
     transition: 0.3s;
 }
 
 .card:hover {
     transform: scale(1.08);
-    box-shadow: 0 0 30px #00f7ff;
+    box-shadow: 0 0 40px #00f7ff;
 }
 
 .card img {
-    width: 70px;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
 }
 
 .delete-btn {
     background: red;
-    margin-top: 8px;
+    margin-top: 10px;
+    padding: 5px;
 }
+
 </style>
 </head>
 
@@ -75,48 +89,44 @@ button {
 
 <h1>🚀 FUTURE APP HUB</h1>
 
-<input type="text" id="appName" placeholder="Add app">
+<input type="text" id="appName" placeholder="Enter app name">
 <button onclick="addApp()">Add</button>
+
+<br>
 
 <input type="text" id="search" placeholder="Search..." onkeyup="searchApps()">
 
 <h3 id="count"></h3>
 
-<!-- ⭐ FEATURED -->
-<div class="section">
 <h2>⭐ Featured Apps</h2>
 <div class="grid" id="featured"></div>
-</div>
 
-<!-- ➕ USER -->
-<div class="section">
 <h2>➕ Your Apps</h2>
 <div class="grid" id="user"></div>
-</div>
 
 <script>
 
-// ⭐ FEATURED APPS (15)
+// ⭐ Featured apps
 const featuredApps = [
     "instagram","youtube","netflix","amazon","swiggy","zomato",
     "spotify","twitter","linkedin","facebook","whatsapp",
     "gmail","google","aws","github"
 ];
 
-// 🧠 CREATE CARD (AUTO LOGO + LINK)
+// 🧠 CREATE CARD
 function createCard(name, container) {
 
     const domain = name.replace(/\s+/g, '') + ".com";
-
-    const img = "https://logo.clearbit.com/" + domain;
+    const logo = "https://logo.clearbit.com/" + domain;
     const link = "https://" + domain;
 
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-        <a href="${link}" target="_blank">
-            <img src="${img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/565/565547.png'">
+        <a href="${link}" target="_blank" style="text-decoration:none; color:white;">
+            <img src="${logo}" 
+                 onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/565/565547.png';">
             <h3>${name}</h3>
         </a>
         ${container === "user" ? `<button class="delete-btn" onclick="deleteCard(this)">Delete</button>` : ""}
@@ -127,12 +137,11 @@ function createCard(name, container) {
 
 // ➕ ADD APP
 function addApp() {
-    const name = document.getElementById("appName").value.toLowerCase();
+    const name = document.getElementById("appName").value.trim().toLowerCase();
     if (!name) return;
 
     createCard(name, "user");
     updateCount();
-
     document.getElementById("appName").value = "";
 }
 
@@ -156,7 +165,7 @@ function updateCount() {
         "Total Apps: " + document.querySelectorAll(".card").length;
 }
 
-// 🔄 LOAD FEATURED
+// LOAD
 window.onload = function() {
     featuredApps.forEach(app => createCard(app, "featured"));
     updateCount();
