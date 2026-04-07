@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud App Catalog</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 40px;
+            font-size: 40px;
+        }
+
+        .container {
+            background: white;
+            color: black;
+            width: 350px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+        }
+
+        input {
+            padding: 10px;
+            width: 70%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .delete-btn {
+            background: red;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>☁️ Cloud Application Catalog</h1>
+
+<div class="container">
+    <input type="text" id="appName" placeholder="Enter app name">
+    <button onclick="addApp()">Add</button>
+
+    <ul id="list"></ul>
+</div>
+
+<script>
+function addApp() {
+    const input = document.getElementById("appName");
+    const list = document.getElementById("list");
+
+    if (input.value !== "") {
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            ${input.value}
+            <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
+        `;
+
+        list.appendChild(li);
+        input.value = "";
+    }
+}
+</script>
+
+</body>
+</html>
